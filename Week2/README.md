@@ -1,29 +1,60 @@
-# Week2
+# TypeScript Generics and Interfaces Explanation
 
-This template should help get you started developing with Vue 3 in Vite.
+## Interfaces
+An interface is a way to define a contract for an object's shape. It specifies what properties and methods an object must have.
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+Example of our Task interface:
+```typescript
+interface Task {
+    text: string;      // Must have a text property of type string
+    completed: boolean; // Must have a completed property of type boolean
+}
 ```
 
-### Compile and Hot-Reload for Development
+You can use this interface to ensure objects follow this structure:
+```typescript
+// Valid usage
+const task: Task = {
+    text: "Learn Vue",
+    completed: false
+}
 
-```sh
-npm run dev
+// Invalid usage - will show error
+const invalidTask: Task = {
+    text: "Learn Vue"
+    // Error: missing 'completed' property
+}
 ```
 
-### Compile and Minify for Production
+## Generics
+Generics allow you to write flexible, reusable code that works with different types while maintaining type safety.
 
-```sh
-npm run build
+In our code:
+```typescript
+const tasks = ref<Task[]>([]);
 ```
+
+This means:
+- `ref<Task[]>` is a generic type
+- `Task[]` is the type argument (an array of Task objects)
+- The ref will only accept arrays containing objects that match the Task interface
+
+Other generic examples:
+```typescript
+// Generic array
+const numbers: Array<number> = [1, 2, 3];
+const strings: Array<string> = ["a", "b", "c"];
+
+// Generic function
+function firstItem<T>(array: T[]): T | undefined {
+    return array[0];
+}
+
+// Usage
+const first = firstItem<Task>(tasks.value); // Returns a Task or undefined
+```
+
+### Why Use Generics?
+1. Type Safety: Catch errors at compile time
+2. Code Reusability: Write functions that work with multiple types
+3. Better IDE Support: Get better autocomplete and type hints
