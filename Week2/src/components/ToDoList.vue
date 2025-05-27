@@ -12,8 +12,16 @@
                 <button type="submit" class="add-button">Add Task</button>
             </div>
         </form>
+        <div class="search-container">
+            <input 
+                type="text" 
+                v-model="searchTodoItem"
+                placeholder="Search tasks..."
+                class="search-input"
+            >
+        </div>
         <ul class="todo-list">
-            <li v-for="(task, index) in tasks" 
+            <li v-for="(task, index) in filteredTasks" 
                 :key="index"
                 class="todo-item"
                 :class="task.completed ? 'completed' : ''"
@@ -33,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 interface Task {
     text: string;      
@@ -60,6 +68,41 @@ const addTask = () => {
 const deleteTask = (index: number) => {
     tasks.value.splice(index, 1)
 }
+
+const searchTodoItem = ref('');
+
+const filteredTasks = computed(() => {
+    const searchTerm = searchTodoItem.value.toLowerCase();
+    
+    return tasks.value.filter(task => 
+        task.text.toLowerCase().includes(searchTerm)
+    );
+});
+
+// When searchQuery is empty (''), this condition:
+    // task.text.toLowerCase().includes('') will ALWAYS return true for every task ecause every string includes an empty string
+      
+    // Example:
+    // "Buy milk".toLowerCase().includes('')  -> true
+    // "Do homework".toLowerCase().includes('') -> true
+    // "Any task".toLowerCase().includes('') -> true
+    
+
+/*
+The filter() method creates a new array filled with elements that pass a test provided by a function.
+The filter() method does not change the original array.
+
+//Syntax
+filter(callbackFn)
+filter(callbackFn, thisArg)
+The callback func, is to interate every element in the array. 
+It should return a truthy value to keep the element in the resulting array, and a falsy value otherwise.
+ The function is called with the following arguments: 
+ - element: Current element being processed in the array
+- index: current index being process in the array
+- array: the array  filter() was called
+
+*/
 
 </script>
 
@@ -161,5 +204,23 @@ const deleteTask = (index: number) => {
 
 .delete-button:hover {
     background-color: #ffe3e3;
+}
+
+.search-container {
+    margin-bottom: 1rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #4CAF50;
 }
 </style>
