@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeMount, onMounted, onBeforeUnmount, onUnmounted } from 'vue';
 
 interface Task {
     text: string;      
@@ -73,7 +73,6 @@ const searchTodoItem = ref('');
 
 const filteredTasks = computed(() => {
     const searchTerm = searchTodoItem.value.toLowerCase();
-    
     return tasks.value.filter(task => 
         task.text.toLowerCase().includes(searchTerm)
     );

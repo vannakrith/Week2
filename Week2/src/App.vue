@@ -7,6 +7,7 @@
        <ToDoList/>
       <!-- <UnderstandArrayGenericSyntax/> -->
       <!-- <ComputedProperty/> -->
+       <!-- <LifeCyleHook/> -->
     </div>
 
   </main>
@@ -17,6 +18,9 @@
   import ToDoList from './components/ToDoList.vue'
   import UnderstandArrayGenericSyntax from './components/UnderstandArrayGenericSyntax.vue'
   import ComputedProperty from './components/ComputedProperty.vue'
+  import LifeCyleHook from './components/LifeCycleHook.vue'
+import { onMounted } from 'vue';
+
 
 </script>
 
