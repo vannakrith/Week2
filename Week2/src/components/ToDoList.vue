@@ -15,16 +15,16 @@
         <div class="search-container">
             <input 
                 type="text" 
-                v-model="searchTodoItem"
+                v-model="searchInput"
                 placeholder="Search tasks..."
                 class="search-input"
             >
         </div>
         <ul class="todo-list">
             <li v-for="(task, index) in filteredTasks" 
-                :key="index"
+                :key="task.id"
                 class="todo-item"
-                :class="task.completed ? 'completed' : ''"
+                :class="{'completed':task.completed}"
             >
                 <div class="todo-content">
                     <input 
@@ -41,42 +41,54 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onBeforeMount, onMounted, onBeforeUnmount, onUnmounted } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 interface Task {
+    id: number
     text: string;      
     completed: boolean; 
 }
 
-const tasks = ref<Task[]>([]) ;  // '' is the default value, 
+const tasks = ref<Task[]>([]) ;  // '' is the default value,  
               //  ^^^^^^  ^^
              //   |     |
             //    |     └── Initial value (empty array)
             //    └── Generic type parameter
 const newTaskInput = ref<string> ('');
+const searchInput = ref('');
+
 
 const addTask = () => {
     if(newTaskInput.value.trim() !== '') {
         tasks.value.push({
+            id: 1,
             text: newTaskInput.value,
             completed: false
         });
+        console.log(tasks.value);
+        
         newTaskInput.value = ''; //clear input after task is added
     }
 }
 
-const deleteTask = (index: number) => {
-    tasks.value.splice(index, 1)
+const deleteTask = (id: number) => {
+    tasks.value.splice(id, 1)
 }
 
-const searchTodoItem = ref('');
 
 const filteredTasks = computed(() => {
-    const searchTerm = searchTodoItem.value.toLowerCase();
+    const searchTerm = searchInput.value.toLowerCase();
     return tasks.value.filter(task => 
         task.text.toLowerCase().includes(searchTerm)
     );
 });
+
+// watch(() => [searchTodoItem.value, tasks.value], () => {
+//     const searchTerm = searchTodoItem.value.toLowerCase();
+//     searchedTasks.value = tasks.value.filter(task => 
+//         task.text.toLowerCase().includes(searchTerm)
+//     );
+// });
 
 // When searchQuery is empty (''), this condition:
     // task.text.toLowerCase().includes('') will ALWAYS return true for every task ecause every string includes an empty string
@@ -102,6 +114,10 @@ It should return a truthy value to keep the element in the resulting array, and 
 - array: the array  filter() was called
 
 */
+
+
+//enahance 
+// Make filter for id, name, status
 
 </script>
 
